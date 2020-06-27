@@ -13,9 +13,12 @@ const defaultTodoList = [
   {title: 'deploy app'},
 ];
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class TodoListService {
-  todoList: TodoItem[];
+
+  private todoList: TodoItem[];
 
   constructor(private storageService: StorageService) {
     this.todoList =
@@ -24,26 +27,26 @@ export class TodoListService {
 
   saveList() {
     this.storageService.setData(todoListStorageKey, this.todoList);
-}
+  }
+
+  getTodoList() {
+    return this.todoList;
+  }
 
   addItem(item: TodoItem) {
     this.todoList.push(item);
     this.saveList();
   }
 
-  updateItem(item, changes) {
+  updateItem(item: TodoItem, changes) {
     const index = this.todoList.indexOf(item);
     this.todoList[index] = { ...item, ...changes };
     this.saveList();
   }
 
-  deleteItem(item) {
+  deleteItem(item: TodoItem) {
     const index = this.todoList.indexOf(item);
     this.todoList.splice(index, 1);
     this.saveList();
   }
-  getTodoList() {
-    return this.todoList;
-  }
-
 }
